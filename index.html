@@ -1,0 +1,1416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personal Finance Management System | Speed School of Engineering | University of Louisville</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    
+    <style>
+        /* ========================================
+           UofL Brand Colors
+           ======================================== */
+        :root {
+            /* Primary Palette */
+            --cardinal-red: #AD0000;
+            --cardinal-red-dark: #8a0000;
+            --black: #000000;
+            --white: #FFFFFF;
+            
+            /* Historic Accents */
+            --brandeis-ash: #8B9DA1;
+            --swain-tobacco: #7A6C53;
+            --parkway-laurel: #98BD83;
+            --patterson-red: #9A1220;
+            --strong-bronze: #CA942F;
+            --jefferson-parchment: #D9C982;
+            
+            /* Vibrant Accents */
+            --loyalty: #004E74;
+            --courage: #FEBE10;
+            --progress: #00A89D;
+            --innovation: #AAB43A;
+            
+            /* Neutrals */
+            --gray-100: #f8f9fa;
+            --gray-200: #e9ecef;
+            --gray-300: #dee2e6;
+            --gray-400: #ced4da;
+            --gray-500: #adb5bd;
+            --gray-600: #6c757d;
+            --gray-700: #495057;
+            --gray-800: #343a40;
+            --gray-900: #212529;
+            
+            /* Typography */
+            --font-primary: 'Montserrat', sans-serif;
+            --font-serif: 'Libre Baskerville', serif;
+            
+            /* Spacing */
+            --space-xs: 0.25rem;
+            --space-sm: 0.5rem;
+            --space-md: 1rem;
+            --space-lg: 1.5rem;
+            --space-xl: 2rem;
+            --space-2xl: 3rem;
+            --space-3xl: 4rem;
+            --space-4xl: 6rem;
+            
+            /* Transitions */
+            --transition-fast: 150ms ease;
+            --transition-base: 250ms ease;
+            --transition-slow: 400ms ease;
+            
+            /* Shadows */
+            --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+            --shadow-md: 0 4px 6px rgba(0,0,0,0.1);
+            --shadow-lg: 0 10px 25px rgba(0,0,0,0.15);
+            --shadow-xl: 0 20px 40px rgba(0,0,0,0.2);
+        }
+
+        /* ========================================
+           Reset & Base Styles
+           ======================================== */
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            font-size: 16px;
+        }
+
+        body {
+            font-family: var(--font-primary);
+            font-weight: 400;
+            line-height: 1.6;
+            color: var(--gray-800);
+            background-color: var(--white);
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-weight: 700;
+            line-height: 1.2;
+        }
+
+        /* ========================================
+           Skip Link (Accessibility)
+           ======================================== */
+        .skip-link {
+            position: absolute;
+            top: -100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--cardinal-red);
+            color: white;
+            padding: var(--space-sm) var(--space-lg);
+            border-radius: 0 0 8px 8px;
+            z-index: 10000;
+            transition: top var(--transition-base);
+        }
+
+        .skip-link:focus {
+            top: 0;
+        }
+
+        /* ========================================
+           Header
+           ======================================== */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid transparent;
+            transition: all var(--transition-base);
+        }
+
+        .header.scrolled {
+            border-bottom-color: var(--gray-200);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .header-inner {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: var(--space-md) var(--space-xl);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        /* Logo */
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: var(--space-md);
+        }
+
+        .logo-mark {
+            font-size: 1.5rem;
+            font-weight: 900;
+            color: var(--cardinal-red);
+            letter-spacing: -0.02em;
+        }
+
+        .logo-mark span {
+            font-size: 0.9rem;
+            font-weight: 400;
+            color: var(--gray-500);
+        }
+
+        .logo-divider {
+            width: 1px;
+            height: 2.5rem;
+            background: var(--gray-300);
+        }
+
+        .logo-text {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .logo-text-top {
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: var(--gray-600);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .logo-text-bottom {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--gray-900);
+        }
+
+        /* Navigation */
+        .nav {
+            display: none;
+            align-items: center;
+            gap: var(--space-xl);
+        }
+
+        @media (min-width: 768px) {
+            .nav {
+                display: flex;
+            }
+        }
+
+        .nav-link {
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--gray-600);
+            transition: color var(--transition-fast);
+        }
+
+        .nav-link:hover,
+        .nav-link:focus {
+            color: var(--cardinal-red);
+        }
+
+        .menu-toggle {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            padding: var(--space-sm);
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        .menu-toggle span {
+            width: 24px;
+            height: 2px;
+            background: var(--gray-800);
+            border-radius: 2px;
+            transition: all var(--transition-base);
+        }
+
+        @media (min-width: 768px) {
+            .menu-toggle {
+                display: none;
+            }
+        }
+
+        /* Auth Buttons */
+        .auth-buttons {
+            display: none;
+            align-items: center;
+            gap: var(--space-sm);
+        }
+
+        @media (min-width: 768px) {
+            .auth-buttons {
+                display: flex;
+            }
+        }
+
+        .btn-login {
+            padding: var(--space-sm) var(--space-md);
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--gray-700);
+            text-decoration: none;
+            border-radius: 6px;
+            transition: all var(--transition-fast);
+        }
+
+        .btn-login:hover {
+            color: var(--cardinal-red);
+            background: rgba(173, 0, 0, 0.05);
+        }
+
+        .btn-signup {
+            padding: var(--space-sm) var(--space-lg);
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--white);
+            background: var(--cardinal-red);
+            text-decoration: none;
+            border-radius: 6px;
+            transition: all var(--transition-fast);
+        }
+
+        .btn-signup:hover {
+            background: var(--cardinal-red-dark);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(173, 0, 0, 0.3);
+        }
+
+        /* ========================================
+           Hero Section
+           ======================================== */
+        .hero {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            background: linear-gradient(135deg, var(--gray-900) 0%, #1a1a2e 50%, var(--gray-900) 100%);
+            overflow: hidden;
+            padding-top: 80px;
+        }
+
+        .hero-pattern {
+            position: absolute;
+            inset: 0;
+            background-image: radial-gradient(circle at 20% 50%, rgba(173, 0, 0, 0.15) 0%, transparent 50%),
+                              radial-gradient(circle at 80% 50%, rgba(0, 78, 116, 0.15) 0%, transparent 50%);
+        }
+
+        .hero-grid {
+            position: absolute;
+            inset: 0;
+            background-image: 
+                linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+        }
+
+        .hero-inner {
+            position: relative;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: var(--space-4xl) var(--space-xl);
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: var(--space-3xl);
+            align-items: center;
+        }
+
+        @media (min-width: 1024px) {
+            .hero-inner {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        .hero-content {
+            color: var(--white);
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-sm);
+            background: rgba(173, 0, 0, 0.2);
+            border: 1px solid rgba(173, 0, 0, 0.3);
+            padding: var(--space-xs) var(--space-md);
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: #ff6b6b;
+            margin-bottom: var(--space-lg);
+        }
+
+        .hero-badge svg {
+            width: 14px;
+            height: 14px;
+        }
+
+        .hero-content h1 {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: var(--space-lg);
+        }
+
+        .hero-content h1 .highlight {
+            background: linear-gradient(135deg, var(--cardinal-red), #ff6b6b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-description {
+            font-size: 1.125rem;
+            color: var(--gray-400);
+            max-width: 500px;
+            margin-bottom: var(--space-xl);
+            line-height: 1.7;
+        }
+
+        .hero-cta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--space-md);
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-sm);
+            padding: var(--space-md) var(--space-xl);
+            font-size: 0.9375rem;
+            font-weight: 600;
+            border-radius: 8px;
+            transition: all var(--transition-base);
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        .btn-primary {
+            background: var(--cardinal-red);
+            color: var(--white);
+        }
+
+        .btn-primary:hover {
+            background: var(--cardinal-red-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(173, 0, 0, 0.4);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--white);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        /* Hero Visual - Dashboard Preview */
+        .hero-visual {
+            position: relative;
+        }
+
+        .dashboard-preview {
+            background: var(--white);
+            border-radius: 16px;
+            box-shadow: 0 25px 80px rgba(0, 0, 0, 0.5);
+            overflow: hidden;
+        }
+
+        .dashboard-header {
+            background: var(--gray-100);
+            padding: var(--space-md) var(--space-lg);
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .dashboard-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .dashboard-dot.red { background: #ff5f57; }
+        .dashboard-dot.yellow { background: #febc2e; }
+        .dashboard-dot.green { background: #28c840; }
+
+        .dashboard-body {
+            padding: var(--space-lg);
+        }
+
+        .dashboard-greeting {
+            font-size: 0.875rem;
+            color: var(--gray-500);
+            margin-bottom: var(--space-xs);
+        }
+
+        .dashboard-name {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: var(--space-lg);
+        }
+
+        .dashboard-cards {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: var(--space-md);
+            margin-bottom: var(--space-lg);
+        }
+
+        .dash-card {
+            background: var(--gray-100);
+            border-radius: 12px;
+            padding: var(--space-md);
+        }
+
+        .dash-card-label {
+            font-size: 0.75rem;
+            color: var(--gray-500);
+            margin-bottom: var(--space-xs);
+        }
+
+        .dash-card-value {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--gray-900);
+        }
+
+        .dash-card-value.positive { color: var(--progress); }
+        .dash-card-value.warning { color: var(--courage); }
+
+        .dashboard-chart {
+            background: var(--gray-100);
+            border-radius: 12px;
+            padding: var(--space-md);
+            height: 120px;
+            display: flex;
+            align-items: flex-end;
+            gap: var(--space-sm);
+        }
+
+        .chart-bar {
+            flex: 1;
+            background: linear-gradient(to top, var(--cardinal-red), #ff6b6b);
+            border-radius: 4px 4px 0 0;
+            min-height: 20px;
+        }
+
+        /* ========================================
+           Stats Section
+           ======================================== */
+        .stats {
+            background: var(--white);
+            padding: var(--space-3xl) var(--space-xl);
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .stats-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: var(--space-xl);
+        }
+
+        @media (min-width: 768px) {
+            .stats-inner {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--cardinal-red);
+            line-height: 1;
+            margin-bottom: var(--space-sm);
+        }
+
+        .stat-label {
+            font-size: 0.875rem;
+            color: var(--gray-600);
+        }
+
+        /* ========================================
+           Features Section
+           ======================================== */
+        .features {
+            padding: var(--space-4xl) var(--space-xl);
+            background: var(--gray-100);
+        }
+
+        .features-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: var(--space-3xl);
+        }
+
+        .section-label {
+            display: inline-block;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--cardinal-red);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: var(--space-sm);
+        }
+
+        .section-header h2 {
+            font-size: clamp(1.75rem, 3vw, 2.5rem);
+            margin-bottom: var(--space-md);
+            color: var(--gray-900);
+        }
+
+        .section-header p {
+            font-size: 1.0625rem;
+            color: var(--gray-600);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: var(--space-xl);
+        }
+
+        @media (min-width: 768px) {
+            .features-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .features-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        .feature-card {
+            background: var(--white);
+            border-radius: 16px;
+            padding: var(--space-xl);
+            border: 1px solid var(--gray-200);
+            transition: all var(--transition-base);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--cardinal-red);
+        }
+
+        .feature-icon {
+            width: 56px;
+            height: 56px;
+            background: linear-gradient(135deg, var(--cardinal-red), #ff6b6b);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: var(--space-lg);
+        }
+
+        .feature-icon svg {
+            width: 28px;
+            height: 28px;
+            color: var(--white);
+        }
+
+        .feature-card h3 {
+            font-size: 1.125rem;
+            margin-bottom: var(--space-sm);
+            color: var(--gray-900);
+        }
+
+        .feature-card p {
+            font-size: 0.9375rem;
+            color: var(--gray-600);
+            line-height: 1.6;
+        }
+
+        /* ========================================
+           How It Works Section
+           ======================================== */
+        .how-it-works {
+            padding: var(--space-4xl) var(--space-xl);
+            background: var(--white);
+        }
+
+        .how-it-works-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .steps {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: var(--space-xl);
+        }
+
+        @media (min-width: 768px) {
+            .steps {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+
+        .step {
+            text-align: center;
+            position: relative;
+        }
+
+        .step-number {
+            width: 48px;
+            height: 48px;
+            background: var(--cardinal-red);
+            color: var(--white);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin: 0 auto var(--space-lg);
+        }
+
+        .step h3 {
+            font-size: 1rem;
+            margin-bottom: var(--space-sm);
+            color: var(--gray-900);
+        }
+
+        .step p {
+            font-size: 0.875rem;
+            color: var(--gray-600);
+        }
+
+        /* ========================================
+           Security Section
+           ======================================== */
+        .security {
+            padding: var(--space-4xl) var(--space-xl);
+            background: var(--gray-900);
+            color: var(--white);
+        }
+
+        .security-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: var(--space-3xl);
+            align-items: center;
+        }
+
+        @media (min-width: 1024px) {
+            .security-inner {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        .security-content h2 {
+            font-size: clamp(1.75rem, 3vw, 2.5rem);
+            margin-bottom: var(--space-lg);
+        }
+
+        .security-content p {
+            font-size: 1.0625rem;
+            color: var(--gray-400);
+            margin-bottom: var(--space-xl);
+            line-height: 1.7;
+        }
+
+        .security-features {
+            display: grid;
+            gap: var(--space-md);
+        }
+
+        .security-feature {
+            display: flex;
+            align-items: flex-start;
+            gap: var(--space-md);
+        }
+
+        .security-feature svg {
+            width: 24px;
+            height: 24px;
+            color: var(--progress);
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .security-feature strong {
+            display: block;
+            margin-bottom: var(--space-xs);
+        }
+
+        .security-feature span {
+            font-size: 0.875rem;
+            color: var(--gray-400);
+        }
+
+        .security-visual {
+            display: flex;
+            justify-content: center;
+        }
+
+        .security-icon-large {
+            width: 200px;
+            height: 200px;
+            background: linear-gradient(135deg, rgba(0, 168, 157, 0.2), rgba(0, 168, 157, 0.05));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .security-icon-large svg {
+            width: 80px;
+            height: 80px;
+            color: var(--progress);
+        }
+
+        /* ========================================
+           CTA Section
+           ======================================== */
+        .cta {
+            padding: var(--space-4xl) var(--space-xl);
+            background: linear-gradient(135deg, var(--cardinal-red), var(--cardinal-red-dark));
+            text-align: center;
+            color: var(--white);
+        }
+
+        .cta-inner {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .cta h2 {
+            font-size: clamp(1.75rem, 3vw, 2.5rem);
+            margin-bottom: var(--space-md);
+        }
+
+        .cta p {
+            font-size: 1.0625rem;
+            opacity: 0.9;
+            margin-bottom: var(--space-xl);
+        }
+
+        .cta .btn-primary {
+            background: var(--white);
+            color: var(--cardinal-red);
+        }
+
+        .cta .btn-primary:hover {
+            background: var(--gray-100);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        /* ========================================
+           Footer
+           ======================================== */
+        .footer {
+            background: var(--gray-900);
+            color: var(--gray-400);
+            padding: var(--space-3xl) var(--space-xl) var(--space-xl);
+        }
+
+        .footer-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-top {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: var(--space-xl);
+            padding-bottom: var(--space-xl);
+            border-bottom: 1px solid var(--gray-800);
+            margin-bottom: var(--space-xl);
+        }
+
+        @media (min-width: 768px) {
+            .footer-top {
+                grid-template-columns: 2fr 1fr 1fr 1fr;
+            }
+        }
+
+        .footer-brand .logo-mark {
+            color: var(--white);
+            margin-bottom: var(--space-md);
+        }
+
+        .footer-brand p {
+            font-size: 0.875rem;
+            line-height: 1.6;
+        }
+
+        .footer-links h4 {
+            color: var(--white);
+            font-size: 0.875rem;
+            margin-bottom: var(--space-md);
+        }
+
+        .footer-links ul {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: var(--space-sm);
+        }
+
+        .footer-links a {
+            font-size: 0.875rem;
+            color: var(--gray-400);
+            transition: color var(--transition-fast);
+        }
+
+        .footer-links a:hover {
+            color: var(--white);
+        }
+
+        .footer-bottom {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-md);
+            align-items: center;
+            text-align: center;
+        }
+
+        @media (min-width: 768px) {
+            .footer-bottom {
+                flex-direction: row;
+                justify-content: space-between;
+                text-align: left;
+            }
+        }
+
+        .footer-bottom p {
+            font-size: 0.8125rem;
+        }
+
+        .footer-legal {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--space-md);
+            justify-content: center;
+        }
+
+        .footer-legal a {
+            font-size: 0.8125rem;
+            color: var(--gray-500);
+            transition: color var(--transition-fast);
+        }
+
+        .footer-legal a:hover {
+            color: var(--white);
+        }
+
+        /* ========================================
+           Animations
+           ======================================== */
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .dashboard-preview {
+            animation: float 6s ease-in-out infinite;
+        }
+    </style>
+</head>
+<body>
+    <!-- Skip Link -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <!-- Header -->
+    <header class="header" role="banner">
+        <div class="header-inner">
+            <!-- Logo -->
+            <a href="/" class="logo" aria-label="University of Louisville Home">
+                <div class="logo-mark">
+                    U<span>of</span>L
+                </div>
+                <div class="logo-divider" aria-hidden="true"></div>
+                <div class="logo-text">
+                    <span class="logo-text-top">Speed School of Engineering</span>
+                    <span class="logo-text-bottom">Personal Finance System</span>
+                </div>
+            </a>
+
+            <!-- Navigation -->
+            <nav class="nav" role="navigation" aria-label="Main navigation">
+                <a href="#features" class="nav-link">Features</a>
+                <a href="#how-it-works" class="nav-link">How It Works</a>
+                <a href="#security" class="nav-link">Security</a>
+            </nav>
+
+            <!-- Auth Buttons -->
+            <div class="auth-buttons">
+                <a href="#" class="btn-login">Log In</a>
+                <a href="#" class="btn-signup">Sign Up</a>
+            </div>
+
+            <!-- Mobile Menu Toggle -->
+            <button class="menu-toggle" aria-label="Open menu" aria-expanded="false">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main id="main-content">
+        <!-- Hero Section -->
+        <section class="hero" aria-labelledby="hero-heading">
+            <div class="hero-pattern" aria-hidden="true"></div>
+            <div class="hero-grid" aria-hidden="true"></div>
+            <div class="hero-inner">
+                <div class="hero-content">
+                    <div class="hero-badge">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                        </svg>
+                        CSE 335 Class Project
+                    </div>
+                    <h1 id="hero-heading">
+                        Take control of <span class="highlight">your money</span>
+                    </h1>
+                    <p class="hero-description">
+                        Stay organized, avoid overspending, and reach your financial goals with tools built specifically for the student lifestyle. Track accounts, manage budgets, monitor credit, and plan for your future—all in one place.
+                    </p>
+                    <div class="hero-cta">
+                        <a href="#" class="btn btn-primary">
+                            Get Started Free
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <path d="M5 12h14"></path>
+                                <path d="m12 5 7 7-7 7"></path>
+                            </svg>
+                        </a>
+                        <a href="#features" class="btn btn-secondary">
+                            See Features
+                        </a>
+                    </div>
+                </div>
+
+                <div class="hero-visual">
+                    <div class="dashboard-preview">
+                        <div class="dashboard-header">
+                            <div class="dashboard-dot red"></div>
+                            <div class="dashboard-dot yellow"></div>
+                            <div class="dashboard-dot green"></div>
+                        </div>
+                        <div class="dashboard-body">
+                            <div class="dashboard-greeting">Welcome back,</div>
+                            <div class="dashboard-name">Cardinal Student 👋</div>
+                            <div class="dashboard-cards">
+                                <div class="dash-card">
+                                    <div class="dash-card-label">Total Balance</div>
+                                    <div class="dash-card-value">$4,285.50</div>
+                                </div>
+                                <div class="dash-card">
+                                    <div class="dash-card-label">This Month</div>
+                                    <div class="dash-card-value positive">+$842.00</div>
+                                </div>
+                                <div class="dash-card">
+                                    <div class="dash-card-label">Budget Left</div>
+                                    <div class="dash-card-value warning">$156.25</div>
+                                </div>
+                                <div class="dash-card">
+                                    <div class="dash-card-label">Credit Score</div>
+                                    <div class="dash-card-value positive">742</div>
+                                </div>
+                            </div>
+                            <div class="dashboard-chart">
+                                <div class="chart-bar" style="height: 40%;"></div>
+                                <div class="chart-bar" style="height: 65%;"></div>
+                                <div class="chart-bar" style="height: 45%;"></div>
+                                <div class="chart-bar" style="height: 80%;"></div>
+                                <div class="chart-bar" style="height: 55%;"></div>
+                                <div class="chart-bar" style="height: 90%;"></div>
+                                <div class="chart-bar" style="height: 70%;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Stats Section -->
+        <section class="stats" aria-label="Platform statistics">
+            <div class="stats-inner">
+                <div class="stat-item">
+                    <div class="stat-value">10+</div>
+                    <div class="stat-label">Account Types Supported</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">24/7</div>
+                    <div class="stat-label">Real-time Tracking</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">100%</div>
+                    <div class="stat-label">Free for Students</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">SQL</div>
+                    <div class="stat-label">Powered Database</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section id="features" class="features" aria-labelledby="features-heading">
+            <div class="features-inner">
+                <div class="section-header">
+                    <span class="section-label">Features</span>
+                    <h2 id="features-heading">Everything You Need to Manage Your Finances</h2>
+                    <p>A comprehensive platform designed to centralize all aspects of personal finance into one intuitive system.</p>
+                </div>
+
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect width="20" height="14" x="2" y="5" rx="2"></rect>
+                                <line x1="2" x2="22" y1="10" y2="10"></line>
+                            </svg>
+                        </div>
+                        <h3>Bank Account Tracking</h3>
+                        <p>Connect and monitor multiple bank accounts in one dashboard. Track balances, view transactions, and get a complete picture of your finances.</p>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                            </svg>
+                        </div>
+                        <h3>Budget Management</h3>
+                        <p>Create monthly budgets, categorize spending, and receive alerts when you're approaching limits. Stay on track with your financial goals.</p>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M3 3v18h18"></path>
+                                <path d="m19 9-5 5-4-4-3 3"></path>
+                            </svg>
+                        </div>
+                        <h3>Credit Score Monitoring</h3>
+                        <p>Track your credit score over time with historical logs. Understand what affects your score and build healthy credit habits.</p>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <path d="M12 6v6l4 2"></path>
+                            </svg>
+                        </div>
+                        <h3>Bill Reminders</h3>
+                        <p>Never miss a payment with automated bill reminders. Track recurring payments, due dates, and manage your payment schedule.</p>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"></path>
+                                <path d="M3 5v14a2 2 0 0 0 2 2h16v-5"></path>
+                                <path d="M18 12a2 2 0 0 0 0 4h4v-4Z"></path>
+                            </svg>
+                        </div>
+                        <h3>Investment Portfolio</h3>
+                        <p>Monitor your investments and track portfolio performance. See your asset allocation and growth over time.</p>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M19 5c-1.5 0-2.8 1.4-3 2-3.5-1.5-11-.3-11 5 0 1.8 0 3 2 4.5V20h4v-2h3v2h4v-4c1-.5 1.7-1 2-2h2v-4h-2c0-1-.5-1.5-1-2V5z"></path>
+                                <path d="M2 9v1c0 1.1.9 2 2 2h1"></path>
+                                <path d="M16 11h.01"></path>
+                            </svg>
+                        </div>
+                        <h3>Savings Goals</h3>
+                        <p>Set and track savings goals for emergencies, travel, or major purchases. Visualize your progress and stay motivated.</p>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect width="18" height="18" x="3" y="3" rx="2"></rect>
+                                <path d="M3 9h18"></path>
+                                <path d="M9 21V9"></path>
+                            </svg>
+                        </div>
+                        <h3>Credit Card Management</h3>
+                        <p>Track credit card transactions, minimum payments, and utilization. Keep your credit card spending in check.</p>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"></path>
+                                <circle cx="12" cy="13" r="3"></circle>
+                            </svg>
+                        </div>
+                        <h3>Receipt Upload</h3>
+                        <p>Upload and store digital receipts for organization and audit purposes. Keep all your transaction records in one place.</p>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M2 20h.01"></path>
+                                <path d="M7 20v-4"></path>
+                                <path d="M12 20v-8"></path>
+                                <path d="M17 20V8"></path>
+                                <path d="M22 4v16"></path>
+                            </svg>
+                        </div>
+                        <h3>Income Tracking</h3>
+                        <p>Log all income sources including jobs, freelance work, and financial aid. Understand your cash flow patterns.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- How It Works Section -->
+        <section id="how-it-works" class="how-it-works" aria-labelledby="how-heading">
+            <div class="how-it-works-inner">
+                <div class="section-header">
+                    <span class="section-label">How It Works</span>
+                    <h2 id="how-heading">Get Started in Minutes</h2>
+                    <p>Our platform is designed to be simple and intuitive. Here's how to begin your financial journey.</p>
+                </div>
+
+                <div class="steps">
+                    <div class="step">
+                        <div class="step-number">1</div>
+                        <h3>Create Account</h3>
+                        <p>Sign up with your UofL email and create a secure password.</p>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <h3>Add Accounts</h3>
+                        <p>Connect your bank accounts, credit cards, and investment accounts.</p>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <h3>Set Goals</h3>
+                        <p>Create budgets, set savings targets, and define financial goals.</p>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">4</div>
+                        <h3>Track & Grow</h3>
+                        <p>Monitor your progress, receive insights, and build wealth over time.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Security Section -->
+        <section id="security" class="security" aria-labelledby="security-heading">
+            <div class="security-inner">
+                <div class="security-content">
+                    <h2 id="security-heading">Your Security is Our Priority</h2>
+                    <p>We take security seriously. Our platform includes comprehensive tracking and protection features to keep your financial data safe.</p>
+                    
+                    <div class="security-features">
+                        <div class="security-feature">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"></path>
+                                <path d="m9 12 2 2 4-4"></path>
+                            </svg>
+                            <div>
+                                <strong>Session Tracking</strong>
+                                <span>Detailed session logs provide visibility into all user activity and login patterns.</span>
+                            </div>
+                        </div>
+                        <div class="security-feature">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"></path>
+                                <path d="m9 12 2 2 4-4"></path>
+                            </svg>
+                            <div>
+                                <strong>Login Attempt Logs</strong>
+                                <span>Monitor and detect potential unauthorized access attempts to your account.</span>
+                            </div>
+                        </div>
+                        <div class="security-feature">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"></path>
+                                <path d="m9 12 2 2 4-4"></path>
+                            </svg>
+                            <div>
+                                <strong>Data Integrity</strong>
+                                <span>SQL-based architecture ensures data integrity and efficient querying across all operations.</span>
+                            </div>
+                        </div>
+                        <div class="security-feature">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"></path>
+                                <path d="m9 12 2 2 4-4"></path>
+                            </svg>
+                            <div>
+                                <strong>Automated Alerts</strong>
+                                <span>Receive notifications for suspicious activity, unusual spending, and important updates.</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="security-visual">
+                    <div class="security-icon-large">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"></path>
+                            <path d="m9 12 2 2 4-4"></path>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA Section -->
+        <section class="cta" aria-labelledby="cta-heading">
+            <div class="cta-inner">
+                <h2 id="cta-heading">Ready to Take Control of Your Finances?</h2>
+                <p>Join other UofL students in building healthy financial habits. Start tracking your money today.</p>
+                <a href="#" class="btn btn-primary">
+                    Create Free Account
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M5 12h14"></path>
+                        <path d="m12 5 7 7-7 7"></path>
+                    </svg>
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer" role="contentinfo">
+        <div class="footer-inner">
+            <div class="footer-top">
+                <div class="footer-brand">
+                    <div class="logo-mark">U<span>of</span>L</div>
+                    <p>Personal Finance Management System - A CSE 335 class project at the University of Louisville J.B. Speed School of Engineering.</p>
+                </div>
+                <div class="footer-links">
+                    <h4>Product</h4>
+                    <ul>
+                        <li><a href="#features">Features</a></li>
+                        <li><a href="#security">Security</a></li>
+                        <li><a href="#how-it-works">How It Works</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h4>Resources</h4>
+                    <ul>
+                        <li><a href="#">Documentation</a></li>
+                        <li><a href="#">API Reference</a></li>
+                        <li><a href="#">Support</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h4>Team</h4>
+                    <ul>
+                        <li>Lee Bennett</li>
+                        <li>Chef Gwandi</li>
+                        <li>Osteen Shisia</li>
+                        <li>Cedric Wells Jr</li>
+                        <li>Mark Wilson</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© 2024 University of Louisville. CSE 335 - Dr. Yehia Mohamed - Group 3</p>
+                <div class="footer-legal">
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Terms of Service</a>
+                    <a href="#">Accessibility</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Header scroll effect
+        const header = document.querySelector('.header');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                const href = this.getAttribute('href');
+                if (href !== '#') {
+                    e.preventDefault();
+                    const target = document.querySelector(href);
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                }
+            });
+        });
+
+        // Mobile menu toggle
+        const menuToggle = document.querySelector('.menu-toggle');
+        menuToggle.addEventListener('click', () => {
+            const expanded = menuToggle.getAttribute('aria-expanded') === 'true';
+            menuToggle.setAttribute('aria-expanded', !expanded);
+        });
+    </script>
+</body>
+</html>

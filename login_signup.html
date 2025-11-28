@@ -1,0 +1,1177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login / Sign Up | Personal Finance System | University of Louisville</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    
+    <style>
+        /* ========================================
+           UofL Brand Colors (Matching Main Page)
+           ======================================== */
+        :root {
+            /* Primary Palette */
+            --cardinal-red: #AD0000;
+            --cardinal-red-dark: #8a0000;
+            --cardinal-red-light: #ff6b6b;
+            --black: #000000;
+            --white: #FFFFFF;
+            
+            /* Historic Accents */
+            --brandeis-ash: #8B9DA1;
+            --swain-tobacco: #7A6C53;
+            --parkway-laurel: #98BD83;
+            --patterson-red: #9A1220;
+            --strong-bronze: #CA942F;
+            --jefferson-parchment: #D9C982;
+            
+            /* Vibrant Accents */
+            --loyalty: #004E74;
+            --courage: #FEBE10;
+            --progress: #00A89D;
+            --innovation: #AAB43A;
+            
+            /* Neutrals */
+            --gray-100: #f8f9fa;
+            --gray-200: #e9ecef;
+            --gray-300: #dee2e6;
+            --gray-400: #ced4da;
+            --gray-500: #adb5bd;
+            --gray-600: #6c757d;
+            --gray-700: #495057;
+            --gray-800: #343a40;
+            --gray-900: #212529;
+            
+            /* Typography */
+            --font-primary: 'Montserrat', sans-serif;
+            --font-serif: 'Libre Baskerville', serif;
+            
+            /* Spacing */
+            --space-xs: 0.25rem;
+            --space-sm: 0.5rem;
+            --space-md: 1rem;
+            --space-lg: 1.5rem;
+            --space-xl: 2rem;
+            --space-2xl: 3rem;
+            --space-3xl: 4rem;
+            --space-4xl: 6rem;
+            
+            /* Transitions */
+            --transition-fast: 150ms ease;
+            --transition-base: 250ms ease;
+            --transition-slow: 400ms ease;
+            
+            /* Shadows */
+            --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+            --shadow-md: 0 4px 6px rgba(0,0,0,0.1);
+            --shadow-lg: 0 10px 25px rgba(0,0,0,0.15);
+            --shadow-xl: 0 20px 40px rgba(0,0,0,0.2);
+            
+            /* Form Specific */
+            --input-height: 48px;
+            --input-border-radius: 8px;
+            --success-color: var(--progress);
+            --error-color: #dc3545;
+            --warning-color: var(--courage);
+        }
+
+        /* ========================================
+           Reset & Base Styles
+           ======================================== */
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            font-size: 16px;
+            height: 100%;
+        }
+
+        body {
+            font-family: var(--font-primary);
+            font-weight: 400;
+            line-height: 1.6;
+            color: var(--gray-800);
+            background: linear-gradient(135deg, var(--gray-900) 0%, #1a1a2e 50%, var(--gray-900) 100%);
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        /* ========================================
+           Background Pattern
+           ======================================== */
+        .auth-pattern {
+            position: fixed;
+            inset: 0;
+            background-image: radial-gradient(circle at 20% 50%, rgba(173, 0, 0, 0.15) 0%, transparent 50%),
+                              radial-gradient(circle at 80% 50%, rgba(0, 78, 116, 0.15) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .auth-grid {
+            position: fixed;
+            inset: 0;
+            background-image: 
+                linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+        }
+
+        /* ========================================
+           Header Bar (Minimal)
+           ======================================== */
+        .auth-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .auth-header-inner {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: var(--space-md) var(--space-xl);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: var(--space-md);
+        }
+
+        .logo-mark {
+            font-size: 1.5rem;
+            font-weight: 900;
+            color: var(--cardinal-red);
+            letter-spacing: -0.02em;
+        }
+
+        .logo-mark span {
+            font-size: 0.9rem;
+            font-weight: 400;
+            color: var(--gray-500);
+        }
+
+        .logo-divider {
+            width: 1px;
+            height: 2.5rem;
+            background: var(--gray-300);
+        }
+
+        .logo-text {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .logo-text-top {
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: var(--gray-600);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .logo-text-bottom {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--gray-900);
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-sm);
+            padding: var(--space-sm) var(--space-md);
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--gray-700);
+            border-radius: 6px;
+            transition: all var(--transition-fast);
+        }
+
+        .back-link:hover {
+            color: var(--cardinal-red);
+            background: rgba(173, 0, 0, 0.05);
+        }
+
+        /* ========================================
+           Auth Container
+           ======================================== */
+        .auth-container {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: var(--space-4xl) var(--space-xl) var(--space-xl);
+            position: relative;
+            z-index: 1;
+        }
+
+        .auth-card {
+            width: 100%;
+            max-width: 460px;
+            background: var(--white);
+            border-radius: 20px;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4);
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Tab Switcher */
+        .auth-tabs {
+            display: flex;
+            background: var(--gray-100);
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .auth-tab {
+            flex: 1;
+            padding: var(--space-lg) var(--space-xl);
+            font-size: 0.9375rem;
+            font-weight: 600;
+            color: var(--gray-600);
+            background: none;
+            border: none;
+            cursor: pointer;
+            transition: all var(--transition-base);
+            position: relative;
+        }
+
+        .auth-tab.active {
+            color: var(--cardinal-red);
+            background: var(--white);
+        }
+
+        .auth-tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--cardinal-red);
+        }
+
+        /* Forms Container */
+        .auth-forms {
+            position: relative;
+            height: auto;
+            min-height: 500px;
+        }
+
+        .auth-form {
+            padding: var(--space-2xl) var(--space-xl) var(--space-xl);
+            display: none;
+            animation: fadeIn var(--transition-base);
+        }
+
+        .auth-form.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Form Header */
+        .form-header {
+            text-align: center;
+            margin-bottom: var(--space-xl);
+        }
+
+        .form-header h2 {
+            font-size: 1.5rem;
+            color: var(--gray-900);
+            margin-bottom: var(--space-sm);
+        }
+
+        .form-header p {
+            font-size: 0.9375rem;
+            color: var(--gray-600);
+        }
+
+        /* Form Groups */
+        .form-group {
+            margin-bottom: var(--space-lg);
+        }
+
+        .form-label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--gray-700);
+            margin-bottom: var(--space-sm);
+        }
+
+        .form-input {
+            width: 100%;
+            height: var(--input-height);
+            padding: 0 var(--space-md);
+            font-size: 0.9375rem;
+            font-family: var(--font-primary);
+            color: var(--gray-800);
+            background: var(--white);
+            border: 2px solid var(--gray-300);
+            border-radius: var(--input-border-radius);
+            transition: all var(--transition-fast);
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--cardinal-red);
+            box-shadow: 0 0 0 3px rgba(173, 0, 0, 0.1);
+        }
+
+        .form-input.error {
+            border-color: var(--error-color);
+        }
+
+        .form-input.error:focus {
+            box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.1);
+        }
+
+        /* Password Input Wrapper */
+        .password-wrapper {
+            position: relative;
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: var(--space-md);
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: var(--gray-600);
+            cursor: pointer;
+            padding: var(--space-sm);
+            transition: color var(--transition-fast);
+        }
+
+        .password-toggle:hover {
+            color: var(--gray-800);
+        }
+
+        /* Error Messages */
+        .error-message {
+            display: none;
+            font-size: 0.8125rem;
+            color: var(--error-color);
+            margin-top: var(--space-xs);
+        }
+
+        .error-message.show {
+            display: block;
+            animation: slideDown var(--transition-fast);
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Remember Me & Forgot Password */
+        .form-options {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: var(--space-xl);
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+        }
+
+        .checkbox-input {
+            width: 18px;
+            height: 18px;
+            accent-color: var(--cardinal-red);
+            cursor: pointer;
+        }
+
+        .checkbox-label {
+            font-size: 0.875rem;
+            color: var(--gray-700);
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .forgot-link {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--cardinal-red);
+            transition: color var(--transition-fast);
+        }
+
+        .forgot-link:hover {
+            color: var(--cardinal-red-dark);
+        }
+
+        /* Submit Button */
+        .submit-button {
+            width: 100%;
+            height: var(--input-height);
+            background: var(--cardinal-red);
+            color: var(--white);
+            font-size: 0.9375rem;
+            font-weight: 600;
+            border: none;
+            border-radius: var(--input-border-radius);
+            cursor: pointer;
+            transition: all var(--transition-base);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .submit-button:hover:not(:disabled) {
+            background: var(--cardinal-red-dark);
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(173, 0, 0, 0.3);
+        }
+
+        .submit-button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .submit-button.loading {
+            color: transparent;
+        }
+
+        .submit-button.loading::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            top: 50%;
+            left: 50%;
+            margin-left: -10px;
+            margin-top: -10px;
+            border: 2px solid var(--white);
+            border-radius: 50%;
+            border-top-color: transparent;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Divider */
+        .form-divider {
+            display: flex;
+            align-items: center;
+            margin: var(--space-xl) 0;
+        }
+
+        .form-divider::before,
+        .form-divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: var(--gray-300);
+        }
+
+        .form-divider span {
+            padding: 0 var(--space-md);
+            font-size: 0.8125rem;
+            color: var(--gray-500);
+            text-transform: uppercase;
+        }
+
+        /* Social Login */
+        .social-login {
+            display: flex;
+            gap: var(--space-md);
+        }
+
+        .social-button {
+            flex: 1;
+            height: var(--input-height);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--space-sm);
+            font-size: 0.875rem;
+            font-weight: 600;
+            border: 2px solid var(--gray-300);
+            border-radius: var(--input-border-radius);
+            background: var(--white);
+            cursor: pointer;
+            transition: all var(--transition-fast);
+        }
+
+        .social-button:hover {
+            border-color: var(--gray-400);
+            background: var(--gray-50);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-md);
+        }
+
+        /* Success Message */
+        .success-message {
+            display: none;
+            background: rgba(152, 189, 131, 0.1);
+            border: 1px solid var(--parkway-laurel);
+            color: var(--gray-800);
+            padding: var(--space-md);
+            border-radius: var(--input-border-radius);
+            margin-bottom: var(--space-lg);
+            animation: slideDown var(--transition-base);
+        }
+
+        .success-message.show {
+            display: block;
+        }
+
+        /* Password Strength Indicator */
+        .password-strength {
+            height: 4px;
+            background: var(--gray-200);
+            border-radius: 2px;
+            margin-top: var(--space-sm);
+            overflow: hidden;
+        }
+
+        .password-strength-bar {
+            height: 100%;
+            width: 0;
+            transition: all var(--transition-base);
+            border-radius: 2px;
+        }
+
+        .password-strength-bar.weak {
+            width: 33%;
+            background: var(--error-color);
+        }
+
+        .password-strength-bar.medium {
+            width: 66%;
+            background: var(--warning-color);
+        }
+
+        .password-strength-bar.strong {
+            width: 100%;
+            background: var(--success-color);
+        }
+
+        .password-strength-text {
+            font-size: 0.75rem;
+            margin-top: var(--space-xs);
+            color: var(--gray-600);
+        }
+
+        /* Terms Text */
+        .terms-text {
+            font-size: 0.8125rem;
+            color: var(--gray-600);
+            text-align: center;
+            margin-top: var(--space-lg);
+        }
+
+        .terms-text a {
+            color: var(--cardinal-red);
+            font-weight: 600;
+            text-decoration: underline;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 480px) {
+            .auth-header-inner {
+                padding: var(--space-md);
+            }
+
+            .logo-text {
+                display: none;
+            }
+
+            .logo-divider {
+                display: none;
+            }
+
+            .auth-container {
+                padding: var(--space-2xl) var(--space-md) var(--space-md);
+            }
+
+            .auth-form {
+                padding: var(--space-xl) var(--space-lg);
+            }
+
+            .social-login {
+                flex-direction: column;
+            }
+        }
+
+        /* Floating Labels Animation */
+        .form-group.floating-label {
+            position: relative;
+            margin-bottom: var(--space-xl);
+        }
+
+        .form-group.floating-label .form-label {
+            position: absolute;
+            top: 14px;
+            left: var(--space-md);
+            background: var(--white);
+            padding: 0 var(--space-xs);
+            transition: all var(--transition-fast);
+            pointer-events: none;
+            font-weight: 400;
+            color: var(--gray-600);
+        }
+
+        .form-group.floating-label .form-input:focus ~ .form-label,
+        .form-group.floating-label .form-input:not(:placeholder-shown) ~ .form-label {
+            top: -10px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--cardinal-red);
+        }
+
+        .form-group.floating-label .form-input {
+            padding-top: var(--space-md);
+        }
+    </style>
+</head>
+<body>
+    <!-- Background Effects -->
+    <div class="auth-pattern" aria-hidden="true"></div>
+    <div class="auth-grid" aria-hidden="true"></div>
+
+    <!-- Header -->
+    <header class="auth-header">
+        <div class="auth-header-inner">
+            <!-- Logo -->
+            <a href="index.html" class="logo" aria-label="University of Louisville Home">
+                <div class="logo-mark">
+                    U<span>of</span>L
+                </div>
+                <div class="logo-divider"></div>
+                <div class="logo-text">
+                    <span class="logo-text-top">Speed School of Engineering</span>
+                    <span class="logo-text-bottom">Personal Finance System</span>
+                </div>
+            </a>
+
+            <!-- Back to Home -->
+            <a href="index.html" class="back-link">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="m15 18-6-6 6-6"></path>
+                </svg>
+                Back to Home
+            </a>
+        </div>
+    </header>
+
+    <!-- Auth Container -->
+    <div class="auth-container">
+        <div class="auth-card">
+            <!-- Tab Switcher -->
+            <div class="auth-tabs">
+                <button class="auth-tab active" id="loginTab" onclick="switchTab('login')">Log In</button>
+                <button class="auth-tab" id="signupTab" onclick="switchTab('signup')">Sign Up</button>
+            </div>
+
+            <!-- Forms Container -->
+            <div class="auth-forms">
+                <!-- Login Form -->
+                <form class="auth-form active" id="loginForm" onsubmit="handleLogin(event)">
+                    <div class="form-header">
+                        <h2>Welcome Back</h2>
+                        <p>Log in to access your financial dashboard</p>
+                    </div>
+
+                    <!-- Success Message -->
+                    <div class="success-message" id="loginSuccess">
+                        Login successful! Redirecting to dashboard...
+                    </div>
+
+                    <!-- Email Field -->
+                    <div class="form-group">
+                        <label class="form-label" for="loginEmail">UofL Email</label>
+                        <input 
+                            type="email" 
+                            id="loginEmail" 
+                            class="form-input" 
+                            placeholder="cardinal@louisville.edu"
+                            required
+                            pattern="[a-zA-Z0-9._%+-]+@louisville\.edu"
+                            oninput="validateEmail(this)"
+                        >
+                        <span class="error-message" id="loginEmailError">Please use your UofL email address</span>
+                    </div>
+
+                    <!-- Password Field -->
+                    <div class="form-group">
+                        <label class="form-label" for="loginPassword">Password</label>
+                        <div class="password-wrapper">
+                            <input 
+                                type="password" 
+                                id="loginPassword" 
+                                class="form-input" 
+                                placeholder="Enter your password"
+                                required
+                                minlength="8"
+                            >
+                            <button type="button" class="password-toggle" onclick="togglePassword('loginPassword')">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                    <circle cx="12" cy="12" r="3"></circle>
+                                </svg>
+                            </button>
+                        </div>
+                        <span class="error-message" id="loginPasswordError">Invalid password</span>
+                    </div>
+
+                    <!-- Remember Me & Forgot Password -->
+                    <div class="form-options">
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="rememberMe" class="checkbox-input">
+                            <label for="rememberMe" class="checkbox-label">Remember me</label>
+                        </div>
+                        <a href="#" class="forgot-link">Forgot password?</a>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <button type="submit" class="submit-button" id="loginButton">
+                        Log In
+                    </button>
+
+                    <!-- Divider -->
+                    <div class="form-divider">
+                        <span>or</span>
+                    </div>
+
+                    <!-- Social Login -->
+                    <div class="social-login">
+                        <button type="button" class="social-button" onclick="handleSocialLogin('google')">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+                                <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+                                <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
+                                <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+                            </svg>
+                            Google
+                        </button>
+                        <button type="button" class="social-button" onclick="handleSocialLogin('microsoft')">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M11.4 11.4H2V2h9.4v9.4z" fill="#f25022"/>
+                                <path d="M22 11.4h-9.4V2H22v9.4z" fill="#7fba00"/>
+                                <path d="M11.4 22H2v-9.4h9.4V22z" fill="#00a4ef"/>
+                                <path d="M22 22h-9.4v-9.4H22V22z" fill="#ffb900"/>
+                            </svg>
+                            Microsoft
+                        </button>
+                    </div>
+                </form>
+
+                <!-- Signup Form -->
+                <form class="auth-form" id="signupForm" onsubmit="handleSignup(event)">
+                    <div class="form-header">
+                        <h2>Create Account</h2>
+                        <p>Join to start managing your finances</p>
+                    </div>
+
+                    <!-- Success Message -->
+                    <div class="success-message" id="signupSuccess">
+                        Account created successfully! Please check your email for verification.
+                    </div>
+
+                    <!-- Name Fields -->
+                    <div style="display: flex; gap: var(--space-md);">
+                        <div class="form-group" style="flex: 1;">
+                            <label class="form-label" for="firstName">First Name</label>
+                            <input 
+                                type="text" 
+                                id="firstName" 
+                                class="form-input" 
+                                placeholder="John"
+                                required
+                                pattern="[A-Za-z]{2,}"
+                                oninput="validateName(this)"
+                            >
+                            <span class="error-message" id="firstNameError">Please enter a valid name</span>
+                        </div>
+                        <div class="form-group" style="flex: 1;">
+                            <label class="form-label" for="lastName">Last Name</label>
+                            <input 
+                                type="text" 
+                                id="lastName" 
+                                class="form-input" 
+                                placeholder="Doe"
+                                required
+                                pattern="[A-Za-z]{2,}"
+                                oninput="validateName(this)"
+                            >
+                            <span class="error-message" id="lastNameError">Please enter a valid name</span>
+                        </div>
+                    </div>
+
+                    <!-- Email Field -->
+                    <div class="form-group">
+                        <label class="form-label" for="signupEmail">UofL Email</label>
+                        <input 
+                            type="email" 
+                            id="signupEmail" 
+                            class="form-input" 
+                            placeholder="cardinal@louisville.edu"
+                            required
+                            pattern="[a-zA-Z0-9._%+-]+@louisville\.edu"
+                            oninput="validateEmail(this)"
+                        >
+                        <span class="error-message" id="signupEmailError">Please use your UofL email address</span>
+                    </div>
+
+                    <!-- Password Field -->
+                    <div class="form-group">
+                        <label class="form-label" for="signupPassword">Password</label>
+                        <div class="password-wrapper">
+                            <input 
+                                type="password" 
+                                id="signupPassword" 
+                                class="form-input" 
+                                placeholder="Create a strong password"
+                                required
+                                minlength="8"
+                                oninput="checkPasswordStrength(this)"
+                            >
+                            <button type="button" class="password-toggle" onclick="togglePassword('signupPassword')">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                    <circle cx="12" cy="12" r="3"></circle>
+                                </svg>
+                            </button>
+                        </div>
+                        <div class="password-strength">
+                            <div class="password-strength-bar" id="passwordStrengthBar"></div>
+                        </div>
+                        <span class="password-strength-text" id="passwordStrengthText">Password must be at least 8 characters</span>
+                    </div>
+
+                    <!-- Confirm Password Field -->
+                    <div class="form-group">
+                        <label class="form-label" for="confirmPassword">Confirm Password</label>
+                        <input 
+                            type="password" 
+                            id="confirmPassword" 
+                            class="form-input" 
+                            placeholder="Re-enter your password"
+                            required
+                            oninput="validatePasswordMatch()"
+                        >
+                        <span class="error-message" id="confirmPasswordError">Passwords do not match</span>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <button type="submit" class="submit-button" id="signupButton">
+                        Create Account
+                    </button>
+
+                    <!-- Terms Text -->
+                    <p class="terms-text">
+                        By creating an account, you agree to our 
+                        <a href="#">Terms of Service</a> and 
+                        <a href="#">Privacy Policy</a>
+                    </p>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Tab Switching
+        function switchTab(tab) {
+            const loginTab = document.getElementById('loginTab');
+            const signupTab = document.getElementById('signupTab');
+            const loginForm = document.getElementById('loginForm');
+            const signupForm = document.getElementById('signupForm');
+
+            if (tab === 'login') {
+                loginTab.classList.add('active');
+                signupTab.classList.remove('active');
+                loginForm.classList.add('active');
+                signupForm.classList.remove('active');
+            } else {
+                signupTab.classList.add('active');
+                loginTab.classList.remove('active');
+                signupForm.classList.add('active');
+                loginForm.classList.remove('active');
+            }
+
+            // Clear any error messages when switching
+            clearErrors();
+        }
+
+        // Password Toggle
+        function togglePassword(inputId) {
+            const input = document.getElementById(inputId);
+            const type = input.type === 'password' ? 'text' : 'password';
+            input.type = type;
+            
+            // Update icon (you could swap between eye and eye-off icons here)
+            const button = input.nextElementSibling;
+            if (type === 'text') {
+                button.innerHTML = `
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                        <line x1="1" y1="1" x2="23" y2="23"></line>
+                    </svg>
+                `;
+            } else {
+                button.innerHTML = `
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                        <circle cx="12" cy="12" r="3"></circle>
+                    </svg>
+                `;
+            }
+        }
+
+        // Email Validation
+        function validateEmail(input) {
+            const emailRegex = /^[a-zA-Z0-9._%+-]+@louisville\.edu$/;
+            const errorElement = document.getElementById(input.id + 'Error');
+            
+            if (!emailRegex.test(input.value) && input.value !== '') {
+                input.classList.add('error');
+                errorElement.classList.add('show');
+            } else {
+                input.classList.remove('error');
+                errorElement.classList.remove('show');
+            }
+        }
+
+        // Name Validation
+        function validateName(input) {
+            const nameRegex = /^[A-Za-z]{2,}$/;
+            const errorElement = document.getElementById(input.id + 'Error');
+            
+            if (!nameRegex.test(input.value) && input.value !== '') {
+                input.classList.add('error');
+                errorElement.classList.add('show');
+            } else {
+                input.classList.remove('error');
+                errorElement.classList.remove('show');
+            }
+        }
+
+        // Password Strength Checker
+        function checkPasswordStrength(input) {
+            const password = input.value;
+            const strengthBar = document.getElementById('passwordStrengthBar');
+            const strengthText = document.getElementById('passwordStrengthText');
+            
+            let strength = 0;
+            
+            // Check length
+            if (password.length >= 8) strength++;
+            if (password.length >= 12) strength++;
+            
+            // Check for different character types
+            if (/[a-z]/.test(password)) strength++;
+            if (/[A-Z]/.test(password)) strength++;
+            if (/[0-9]/.test(password)) strength++;
+            if (/[^a-zA-Z0-9]/.test(password)) strength++;
+            
+            // Update UI
+            strengthBar.className = 'password-strength-bar';
+            
+            if (password.length === 0) {
+                strengthBar.style.width = '0';
+                strengthText.textContent = 'Password must be at least 8 characters';
+                strengthText.style.color = 'var(--gray-600)';
+            } else if (strength < 3) {
+                strengthBar.classList.add('weak');
+                strengthText.textContent = 'Weak password';
+                strengthText.style.color = 'var(--error-color)';
+            } else if (strength < 5) {
+                strengthBar.classList.add('medium');
+                strengthText.textContent = 'Medium strength';
+                strengthText.style.color = 'var(--warning-color)';
+            } else {
+                strengthBar.classList.add('strong');
+                strengthText.textContent = 'Strong password';
+                strengthText.style.color = 'var(--success-color)';
+            }
+        }
+
+        // Password Match Validation
+        function validatePasswordMatch() {
+            const password = document.getElementById('signupPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            const errorElement = document.getElementById('confirmPasswordError');
+            const confirmInput = document.getElementById('confirmPassword');
+            
+            if (password !== confirmPassword && confirmPassword !== '') {
+                confirmInput.classList.add('error');
+                errorElement.classList.add('show');
+            } else {
+                confirmInput.classList.remove('error');
+                errorElement.classList.remove('show');
+            }
+        }
+
+        // Clear Errors
+        function clearErrors() {
+            const errorMessages = document.querySelectorAll('.error-message');
+            const inputs = document.querySelectorAll('.form-input');
+            
+            errorMessages.forEach(error => error.classList.remove('show'));
+            inputs.forEach(input => input.classList.remove('error'));
+        }
+
+        // Handle Login
+        async function handleLogin(event) {
+            event.preventDefault();
+            
+            const button = document.getElementById('loginButton');
+            const successMessage = document.getElementById('loginSuccess');
+            
+            // Add loading state
+            button.classList.add('loading');
+            button.disabled = true;
+            
+            // Simulate API call
+            await new Promise(resolve => setTimeout(resolve, 1500));
+            
+            // Show success message
+            successMessage.classList.add('show');
+            
+            // Remove loading state
+            button.classList.remove('loading');
+            button.disabled = false;
+            
+            // Redirect after 2 seconds
+            setTimeout(() => {
+                window.location.href = 'dashboard.html';
+            }, 2000);
+        }
+
+        // Handle Signup
+        async function handleSignup(event) {
+            event.preventDefault();
+            
+            // Validate all fields
+            const firstName = document.getElementById('firstName').value;
+            const lastName = document.getElementById('lastName').value;
+            const email = document.getElementById('signupEmail').value;
+            const password = document.getElementById('signupPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            
+            // Check if passwords match
+            if (password !== confirmPassword) {
+                document.getElementById('confirmPassword').classList.add('error');
+                document.getElementById('confirmPasswordError').classList.add('show');
+                return;
+            }
+            
+            const button = document.getElementById('signupButton');
+            const successMessage = document.getElementById('signupSuccess');
+            
+            // Add loading state
+            button.classList.add('loading');
+            button.disabled = true;
+            
+            // Simulate API call
+            await new Promise(resolve => setTimeout(resolve, 1500));
+            
+            // Show success message
+            successMessage.classList.add('show');
+            
+            // Remove loading state
+            button.classList.remove('loading');
+            button.disabled = false;
+            
+            // Clear form
+            document.getElementById('signupForm').reset();
+            
+            // Switch to login tab after 3 seconds
+            setTimeout(() => {
+                switchTab('login');
+                successMessage.classList.remove('show');
+            }, 3000);
+        }
+
+        // Handle Social Login
+        async function handleSocialLogin(provider) {
+            console.log(`Logging in with ${provider}`);
+            // Implement OAuth flow here
+            // For now, just simulate a redirect
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            window.location.href = `auth/${provider}`;
+        }
+
+        // Handle forgot password link
+        document.querySelector('.forgot-link').addEventListener('click', (e) => {
+            e.preventDefault();
+            alert('Password reset functionality will be implemented with email service integration.');
+        });
+
+        // Add focus effects
+        document.querySelectorAll('.form-input').forEach(input => {
+            input.addEventListener('focus', () => {
+                input.parentElement.classList.add('focused');
+            });
+            
+            input.addEventListener('blur', () => {
+                if (!input.value) {
+                    input.parentElement.classList.remove('focused');
+                }
+            });
+        });
+
+        // Add enter key support for tab switching
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && e.ctrlKey) {
+                const activeTab = document.querySelector('.auth-tab.active');
+                if (activeTab.id === 'loginTab') {
+                    switchTab('signup');
+                } else {
+                    switchTab('login');
+                }
+            }
+        });
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            // Clear any cached form data
+            document.getElementById('loginForm').reset();
+            document.getElementById('signupForm').reset();
+            
+            // Check for URL parameters (e.g., ?tab=signup)
+            const urlParams = new URLSearchParams(window.location.search);
+            const tab = urlParams.get('tab');
+            if (tab === 'signup') {
+                switchTab('signup');
+            }
+        });
+    </script>
+</body>
+</html>
